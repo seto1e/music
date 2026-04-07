@@ -30,7 +30,6 @@ const GID = {
 const appConfig = {
   ver: 1,
   name: 'kwfm',
-  warning: '⚠️🤖 警告，请勿使用 ⚡️📡',
   message: '',
   desc: '',
   tabLibrary: {
