@@ -31,7 +31,6 @@ const appConfig = {
   ver: 1,
   name: 'wyfm',
   message: '',
-  warning: '⚠️🤖 警告，请勿使用 ⚡️📡',
   desc: '',
   tabLibrary: {
     name: '探索',
