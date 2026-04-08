@@ -76,9 +76,9 @@ const appConfig = {
   "message": "",
   "desc": "",
   "tabLibrary": {
-    "name": "探索",
+    "name": "搜索",
     "groups": [{
-      "name": "推荐",
+      "name": "精選",
       "type": "song",
       "ui": 0,
       "showMore": true,
@@ -86,7 +86,7 @@ const appConfig = {
           "gid": '1'
       }
   }, {
-      "name": "xx热门歌单",
+      "name": "熱門歌曲",
       "type": "playlist",
       "ui": 0,
       "showMore": false,
@@ -94,7 +94,7 @@ const appConfig = {
           "gid": '12'
       }
   }, {
-      "name": "xx榜单",
+      "name": "流行榜",
       "type": "playlist",
       "ui": 1,
       "showMore": false,
@@ -102,7 +102,7 @@ const appConfig = {
           "gid": '11'
       }
   }, {
-      "name": "流行歌单",
+      "name": "流行歌曲",
       "type": "playlist",
       "ui": 1,
       "showMore": false,
@@ -122,16 +122,16 @@ const appConfig = {
   "tabMe": {
     "name": "我的",
     "groups": [{
-      "name": "红心",
+      "name": "音樂",
       "type": "song"
     }, {
-      "name": "歌单",
+      "name": "歌曲",
       "type": "playlist"
     }, {
-      "name": "专辑",
+      "name": "專輯",
       "type": "album"
     }, {
-      "name": "创作者",
+      "name": "歌手",
       "type": "artist"
     }]
   },
@@ -144,7 +144,7 @@ const appConfig = {
         "type": "song"
       }
     }, {
-      "name": "歌单",
+      "name": "列表",
       "type": "playlist",
       "ext": {
         "type": "playlist"
