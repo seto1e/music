@@ -31,9 +31,9 @@ const appConfig = {
   message: '',
   desc: '',
   tabLibrary: {
-    name: '探索',
+    name: '搜尋',
     groups: [{
-      name: '飙升榜',
+      name: '飆升榜',
       type: 'song',
       ui: 0,
       showMore: false,
@@ -42,7 +42,7 @@ const appConfig = {
         id: '62',
       }
     }, {
-      name: '热歌榜',
+      name: '熱門榜',
       type: 'song',
       ui: 0,
       showMore: false,
@@ -68,7 +68,7 @@ const appConfig = {
         gid: GID.TOPLISTS,
       }
     }, {
-      name: '流行歌单',
+      name: '流行歌曲',
       type: 'playlist',
       ui: 1,
       showMore: true,
@@ -78,7 +78,7 @@ const appConfig = {
         sortId: '5',
       }
     }, {
-      name: '国语精选',
+      name: '國語精選',
       type: 'playlist',
       ui: 1,
       showMore: true,
@@ -88,7 +88,7 @@ const appConfig = {
         sortId: '5',
       }
     }, {
-      name: '轻音乐',
+      name: '輕音樂',
       type: 'playlist',
       ui: 1,
       showMore: true,
@@ -98,7 +98,7 @@ const appConfig = {
         sortId: '5',
       }
     }, {
-      name: '影视原声',
+      name: '原聲影視',
       type: 'playlist',
       ui: 1,
       showMore: true,
@@ -108,7 +108,7 @@ const appConfig = {
         sortId: '5',
       }
     }, {
-      name: '治愈歌单',
+      name: '輕鬆歌曲',
       type: 'playlist',
       ui: 1,
       showMore: true,
@@ -118,7 +118,7 @@ const appConfig = {
         sortId: '5',
       }
     }, {
-      name: '热门歌手',
+      name: '熱門歌手',
       type: 'artist',
       ui: 0,
       showMore: true,
@@ -133,18 +133,18 @@ const appConfig = {
       name: '红心',
       type: 'song'
     }, {
-      name: '歌单',
+      name: '歌單',
       type: 'playlist'
     }, {
-      name: '专辑',
+      name: '專輯',
       type: 'album'
     }, {
-      name: '创作者',
+      name: '創作者',
       type: 'artist'
     }]
   },
   tabSearch: {
-    name: '搜索',
+    name: '搜尋',
     groups: [{
       name: '歌曲',
       type: 'song',
@@ -152,13 +152,13 @@ const appConfig = {
         type: 'song',
       }
     }, {
-      name: '歌单',
+      name: '歌單',
       type: 'playlist',
       ext: {
         type: 'playlist',
       }
     }, {
-      name: '专辑',
+      name: '專輯',
       type: 'album',
       ext: {
         type: 'album',
