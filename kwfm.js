@@ -33,16 +33,16 @@ const appConfig = {
   message: '',
   desc: '',
   tabLibrary: {
-    name: '探索',
-    groups: [{ name: '排行榜', type: 'playlist', ui: 1, showMore: true, ext: { gid: GID.TOPLISTS } }, { name: '推荐歌单', type: 'playlist', ui: 1, showMore: true, ext: { gid: GID.RECOMMENDED_PLAYLISTS } }, { name: '热门歌单', type: 'playlist', ui: 1, showMore: true, ext: { gid: GID.HOT_PLAYLISTS } }, { name: '经典歌单', type: 'playlist', ui: 1, showMore: true, ext: { gid: GID.CLASSIC_PLAYLISTS } }, { name: '热门歌手', type: 'artist', ui: 0, showMore: true, ext: { gid: GID.TOP_ARTISTS } }]
+    name: '搜尋',
+    groups: [{ name: '排行榜', type: 'playlist', ui: 1, showMore: true, ext: { gid: GID.TOPLISTS } }, { name: '歌曲推介', type: 'playlist', ui: 1, showMore: true, ext: { gid: GID.RECOMMENDED_PLAYLISTS } }, { name: '熱門歌曲', type: 'playlist', ui: 1, showMore: true, ext: { gid: GID.HOT_PLAYLISTS } }, { name: '經典歌曲', type: 'playlist', ui: 1, showMore: true, ext: { gid: GID.CLASSIC_PLAYLISTS } }, { name: '熱門歌手', type: 'artist', ui: 0, showMore: true, ext: { gid: GID.TOP_ARTISTS } }]
   },
   tabMe: {
     name: '我的',
-    groups: [{ name: '红心', type: 'song' }, { name: '歌单', type: 'playlist' }, { name: '专辑', type: 'album' }, { name: '创作者', type: 'artist' }]
+    groups: [{ name: '红心', type: 'song' }, { name: '歌單', type: 'playlist' }, { name: '專輯', type: 'album' }, { name: '創作者', type: 'artist' }]
   },
   tabSearch: {
-    name: '搜索',
-    groups: [{ name: '歌曲', type: 'song', ext: { type: 'song' } }, { name: '歌单', type: 'playlist', ext: { type: 'playlist' } }, { name: '专辑', type: 'album', ext: { type: 'album' } }, { name: '歌手', type: 'artist', ext: { type: 'artist' } }]
+    name: '搜尋',
+    groups: [{ name: '歌曲', type: 'song', ext: { type: 'song' } }, { name: '歌單', type: 'playlist', ext: { type: 'playlist' } }, { name: '專輯', type: 'album', ext: { type: 'album' } }, { name: '歌手', type: 'artist', ext: { type: 'artist' } }]
   }
 }
 
@@ -111,7 +111,7 @@ function mapArtistCard(item) {
     img: artistCover,
     pic: artistCover,
     artist: { id: artistId, name: artistName, cover: artistCover },
-    groups: [{ name: '热门歌曲', type: 'song', ext: { gid: GID.ARTIST_SONGS, id: artistId } }, { name: '专辑', type: 'album', ext: { gid: GID.ARTIST_ALBUMS, id: artistId } }],
+    groups: [{ name: '熱門歌曲', type: 'song', ext: { gid: GID.ARTIST_SONGS, id: artistId } }, { name: '專輯', type: 'album', ext: { gid: GID.ARTIST_ALBUMS, id: artistId } }],
     ext: { gid: GID.TOP_ARTISTS, id: artistId }
   }
 }
