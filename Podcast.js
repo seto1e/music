@@ -1,7 +1,7 @@
 /*!
  * @name podcast-itunes
  * @description iTunes Podcast Plugin - Minimal Test Version
- * @version v3.0-test
+ * @version v3.1-test
  * @author custom
  * @key csp_podcast
  */
@@ -142,7 +142,7 @@ async function getSongInfo(ext) {
     const { pid, description, pubDate } = argsify(ext)
     if (!pid) return jsonify({ urls: [] })
     return jsonify({
-      urls: [{ url: pid, quality: '128k' }],
+      urls: [pid],
       lyric: [pubDate ? `📅 ${pubDate}` : '', '', description ?? ''].filter(Boolean).join('\n'),
     })
   } catch (e) { return jsonify({ urls: [] }) }
