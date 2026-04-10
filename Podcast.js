@@ -1,7 +1,7 @@
 /*!
  * @name podcast-itunes
  * @description iTunes + BBC + ESL Podcast Plugin
- * @version v2.0.0
+ * @version v2.1.0
  * @author custom
  * @key csp_podcast
  */
@@ -164,13 +164,11 @@ const appConfig = {
   tabLibrary: {
     name: '探索',
     groups: [
-      // 中文
       { name: '🇭🇰 香港熱門', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'hk_top' } },
       { name: '📰 新聞時事', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_news' } },
       { name: '📚 教育', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_edu' } },
       { name: '💼 商業財經', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_biz' } },
       { name: '🏃 健康', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_health' } },
-      // UK / BBC
       { name: '🇬🇧 UK Top', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'uk_top' } },
       { name: '📰 UK News', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'uk_news' } },
       { name: '🎓 BBC 6 Min English', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_learning' } },
@@ -178,13 +176,11 @@ const appConfig = {
       { name: '🌍 BBC Global News', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_global_news' } },
       { name: '🧠 BBC In Our Time', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_in_our_time' } },
       { name: '📡 BBC World Service', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_world_service' } },
-      // 英語學習
       { name: '🐢 English at Your Own Pace', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'esl_beginner' } },
       { name: '📖 ESL Pod', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'esl_pod' } },
       { name: '🗣️ Culips ESL', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'culips_esl' } },
       { name: '🇬🇧 British English Pod', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'british_english_pod' } },
       { name: '📰 News in Slow English', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'news_slow_english' } },
-      // 英文國際
       { name: '🇺🇸 English Top', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'us_top' } },
       { name: '💻 Technology', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'en_tech' } },
       { name: '😂 Comedy', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'en_comedy' } },
@@ -387,18 +383,23 @@ async function search(ext) {
   return jsonify({})
 }
 
+// ✅ 修正版 getSongInfo
 async function getSongInfo(ext) {
   const { pid, description, pubDate } = argsify(ext)
   if (!pid) return jsonify({ urls: [] })
 
-  const lyric = [
-    pubDate ? `📅 ${pubDate}` : '',
-    '',
-    description ?? '',
-  ].filter(v => v !== undefined).join('\n')
+  try {
+    const lyric = [
+      pubDate ? `📅 ${pubDate}` : '',
+      '',
+      description ?? '',
+    ].filter(Boolean).join('\n')
 
-  return jsonify({
-    urls: [pid],
-    lyric: lyric.trim(),
-  })
+    return jsonify({
+      urls: [{ url: pid, quality: '128k' }],
+      lyric: lyric.trim(),
+    })
+  } catch (e) {
+    return jsonify({ urls: [{ url: pid, quality: '128k' }] })
+  }
 }
