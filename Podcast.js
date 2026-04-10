@@ -1,7 +1,7 @@
 /*!
  * @name podcast-itunes
  * @description iTunes + BBC Podcast Plugin
- * @version v5.0.0
+ * @version v6.0.0
  * @author custom
  * @key csp_podcast
  */
@@ -29,8 +29,8 @@ const appConfig = {
     groups: [
       { name: '🇭🇰 香港熱門', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'hk_top' } },
       { name: '🇬🇧 UK Top', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'uk_top' } },
-      { name: '🎓 BBC 6 Min English', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_learning' } },
-      { name: '🌍 BBC Global News', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_global_news' } },
+      { name: '🎓 BBC 6 Min English', type: 'playlist', ui: 0, showMore: false, ext: { gid: 'bbc_learning' } },
+      { name: '🌍 BBC Global News', type: 'playlist', ui: 0, showMore: false, ext: { gid: 'bbc_global_news' } },
     ]
   },
   tabMe: {
