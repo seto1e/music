@@ -1,7 +1,7 @@
 /*!
  * @name podcast-itunes
- * @description iTunes Podcast Plugin - Minimal Test Version
- * @version v3.1-test
+ * @description iTunes + BBC + ESL Podcast Plugin
+ * @version v4.0.0
  * @author custom
  * @key csp_podcast
  */
@@ -12,16 +12,59 @@ const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (
 const headers = { 'User-Agent': UA }
 const ITUNES_API = 'https://itunes.apple.com'
 
+const FEATURED_FEEDS = [
+  // ── 中文 ──────────────────────────────────────
+  { id: 'hk_top', name: '🇭🇰 香港熱門', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=25/json' },
+  { id: 'hk_news', name: '📰 新聞時事', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=25/genre=1489/json' },
+  { id: 'hk_edu', name: '📚 教育', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=25/genre=1304/json' },
+  { id: 'hk_biz', name: '💼 商業財經', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=25/genre=1321/json' },
+  { id: 'hk_health', name: '🏃 健康', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=25/genre=1512/json' },
+  // ── UK / BBC ──────────────────────────────────
+  { id: 'uk_top', name: '🇬🇧 UK Top', rss: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=25/json' },
+  { id: 'uk_news', name: '📰 UK News', rss: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=25/genre=1489/json' },
+  { id: 'bbc_learning', name: '🎓 BBC 6 Min English', rss: 'https://podcasts.files.bbci.co.uk/p02pc9zn.rss', type: 'rss_direct' },
+  { id: 'bbc_english_speak', name: '💬 BBC English We Speak', rss: 'https://podcasts.files.bbci.co.uk/p02pc9tn.rss', type: 'rss_direct' },
+  { id: 'bbc_global_news', name: '🌍 BBC Global News', rss: 'https://podcasts.files.bbci.co.uk/p02nq0gn.rss', type: 'rss_direct' },
+  { id: 'bbc_in_our_time', name: '🧠 BBC In Our Time', rss: 'https://podcasts.files.bbci.co.uk/b006qykl.rss', type: 'rss_direct' },
+  { id: 'bbc_world_service', name: '📡 BBC World Service', rss: 'https://podcasts.files.bbci.co.uk/p02nq0lx.rss', type: 'rss_direct' },
+  // ── 英語學習（初級）─────────────────────────────
+  { id: 'culips_esl', name: '🗣️ Culips ESL', rss: 'https://feeds.libsyn.com/51808/rss', type: 'rss_direct' },
+  { id: 'british_english_pod', name: '🇬🇧 British English Pod', rss: 'https://britishenglishpodcast.com/feed/podcast/', type: 'rss_direct' },
+  { id: 'news_slow_english', name: '📰 News in Slow English', rss: 'https://www.newsinslowenglish.com/feed/podcast/', type: 'rss_direct' },
+  // ── 英文（美式/國際）─────────────────────────────
+  { id: 'us_top', name: '🇺🇸 English Top', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=25/json' },
+  { id: 'en_tech', name: '💻 Technology', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=25/genre=1318/json' },
+  { id: 'en_comedy', name: '😂 Comedy', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=25/genre=1303/json' },
+  { id: 'en_true_crime', name: '🔍 True Crime', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=25/genre=1488/json' },
+]
+
 const appConfig = {
   ver: 1,
-  name: 'Podcast Test',
-  message: '',
-  desc: 'Minimal test version',
+  name: 'Podcast',
+  message: 'iTunes + BBC + ESL Podcast Plugin',
+  desc: '廣東話 & English Podcasts',
   tabLibrary: {
     name: '探索',
     groups: [
       { name: '🇭🇰 香港熱門', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'hk_top' } },
+      { name: '📰 新聞時事', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_news' } },
+      { name: '📚 教育', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_edu' } },
+      { name: '💼 商業財經', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_biz' } },
+      { name: '🏃 健康', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_health' } },
       { name: '🇬🇧 UK Top', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'uk_top' } },
+      { name: '📰 UK News', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'uk_news' } },
+      { name: '🎓 BBC 6 Min English', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_learning' } },
+      { name: '💬 BBC English We Speak', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_english_speak' } },
+      { name: '🌍 BBC Global News', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_global_news' } },
+      { name: '🧠 BBC In Our Time', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_in_our_time' } },
+      { name: '📡 BBC World Service', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'bbc_world_service' } },
+      { name: '🗣️ Culips ESL', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'culips_esl' } },
+      { name: '🇬🇧 British English Pod', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'british_english_pod' } },
+      { name: '📰 News in Slow English', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'news_slow_english' } },
+      { name: '🇺🇸 English Top', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'us_top' } },
+      { name: '💻 Technology', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'en_tech' } },
+      { name: '😂 Comedy', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'en_comedy' } },
+      { name: '🔍 True Crime', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'en_true_crime' } },
     ]
   },
   tabMe: {
@@ -35,13 +78,9 @@ const appConfig = {
     name: '搜索',
     groups: [
       { name: '節目', type: 'playlist', ext: { type: 'playlist' } },
+      { name: '單集', type: 'song', ext: { type: 'song' } },
     ]
   }
-}
-
-const TOP_RSS = {
-  hk_top: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/json',
-  uk_top: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=20/json',
 }
 
 async function getConfig() {
@@ -91,19 +130,11 @@ async function loadRssEpisodes(feedUrl) {
   } catch (e) { return [] }
 }
 
-async function getPlaylists(ext) {
+async function loadItunesTopPodcasts(rssUrl) {
   try {
-    const { page, gid } = argsify(ext)
-    if (page > 1) return jsonify({ list: [] })
-
-    const rssUrl = TOP_RSS[gid]
-    if (!rssUrl) return jsonify({ list: [] })
-
     const { data } = await $fetch.get(rssUrl, { headers })
-    const info = argsify(data)
-    const entries = info?.feed?.entry ?? []
-
-    const cards = entries.map((each) => {
+    const entries = argsify(data)?.feed?.entry ?? []
+    return entries.map((each) => {
       try {
         const id = each?.id?.attributes?.['im:id'] ?? ''
         return {
@@ -115,24 +146,46 @@ async function getPlaylists(ext) {
         }
       } catch (e) { return null }
     }).filter(Boolean)
+  } catch (e) { return [] }
+}
 
+async function getPlaylists(ext) {
+  try {
+    const { page, gid } = argsify(ext)
+    if (page > 1) return jsonify({ list: [] })
+
+    const feed = FEATURED_FEEDS.find(f => f.id === gid)
+    if (!feed) return jsonify({ list: [] })
+
+    if (feed.type === 'rss_direct') {
+      const episodes = await loadRssEpisodes(feed.rss)
+      return jsonify({ list: episodes })
+    }
+
+    const cards = await loadItunesTopPodcasts(feed.rss)
     return jsonify({ list: cards })
   } catch (e) { return jsonify({ list: [] }) }
 }
 
 async function getSongs(ext) {
   try {
-    const { page, id } = argsify(ext)
+    const { page, id, feedUrl } = argsify(ext)
     if (page > 1 || !id) return jsonify({ list: [] })
 
-    const { data } = await $fetch.get(
-      `${ITUNES_API}/lookup?id=${id}&entity=podcast`,
-      { headers }
-    )
-    const feedUrl = argsify(data)?.results?.[0]?.feedUrl ?? ''
-    if (!feedUrl) return jsonify({ list: [] })
+    let rssUrl = feedUrl ?? ''
+    if (!rssUrl) {
+      try {
+        const { data } = await $fetch.get(
+          `${ITUNES_API}/lookup?id=${id}&entity=podcast`,
+          { headers }
+        )
+        rssUrl = argsify(data)?.results?.[0]?.feedUrl ?? ''
+      } catch (e) { rssUrl = '' }
+    }
 
-    const episodes = await loadRssEpisodes(feedUrl)
+    if (!rssUrl) return jsonify({ list: [] })
+
+    const episodes = await loadRssEpisodes(rssUrl)
     return jsonify({ list: episodes })
   } catch (e) { return jsonify({ list: [] }) }
 }
@@ -153,19 +206,42 @@ async function search(ext) {
     const { text, page, type } = argsify(ext)
     if (!text || page > 3) return jsonify({ list: [] })
 
-    const url = `${ITUNES_API}/search?term=${encodeURIComponent(text)}&media=podcast&entity=podcast&limit=20&offset=${(page - 1) * 20}`
-    const { data } = await $fetch.get(url, { headers })
-    const results = argsify(data)?.results ?? []
+    if (type === 'playlist') {
+      const url = `${ITUNES_API}/search?term=${encodeURIComponent(text)}&media=podcast&entity=podcast&limit=20&offset=${(page - 1) * 20}`
+      const { data } = await $fetch.get(url, { headers })
+      const results = argsify(data)?.results ?? []
+      return jsonify({
+        list: results.map((each) => ({
+          id: `${each.collectionId}`,
+          name: each.collectionName ?? '',
+          cover: each.artworkUrl600 ?? '',
+          artist: { id: `${each.artistId ?? ''}`, name: each.artistName ?? '' },
+          ext: { gid: 'podcast', id: `${each.collectionId}`, feedUrl: each.feedUrl ?? '' }
+        }))
+      })
+    }
 
-    return jsonify({
-      list: results.map((each) => ({
-        id: `${each.collectionId}`,
-        name: each.collectionName ?? '',
-        cover: each.artworkUrl600 ?? '',
-        artist: { id: `${each.artistId ?? ''}`, name: each.artistName ?? '' },
-        ext: { gid: 'podcast', id: `${each.collectionId}`, feedUrl: each.feedUrl ?? '' }
-      }))
-    })
+    if (type === 'song') {
+      const url = `${ITUNES_API}/search?term=${encodeURIComponent(text)}&media=podcast&entity=podcastEpisode&limit=20&offset=${(page - 1) * 20}`
+      const { data } = await $fetch.get(url, { headers })
+      const results = argsify(data)?.results ?? []
+      return jsonify({
+        list: results.map((each) => ({
+          id: `${each.trackId}`,
+          name: each.trackName ?? '',
+          cover: each.artworkUrl600 ?? '',
+          duration: each.trackTimeMillis ? Math.floor(each.trackTimeMillis / 1000) : 0,
+          artist: { id: `${each.collectionId ?? ''}`, name: each.collectionName ?? '', cover: '' },
+          ext: {
+            pid: each.episodeUrl ?? '',
+            description: (each.description ?? '').slice(0, 300),
+            pubDate: each.releaseDate ?? '',
+          }
+        }))
+      })
+    }
+
+    return jsonify({ list: [] })
   } catch (e) { return jsonify({ list: [] }) }
 }
 
