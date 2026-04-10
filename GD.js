@@ -1,3 +1,11 @@
+/*!
+ * @name gdstudio
+ * @description GD Studio Music Plugin
+ * @version v1.0.0
+ * @author custom
+ * @key csp_gdstudio
+ */
+
 const $config = argsify($config_str)
 const cheerio = createCheerio()
 const CryptoJS = createCryptoJS()
@@ -844,7 +852,6 @@ const appConfig = {
 	ver: 1,
 	name: 'GD音乐',
 	message: '基于GD Studio音乐API',
-	warning: '基于GD音乐台API(music.gdstudio.xyz)制作\n⚠️仅供学习参考，请勿商用',
 	desc: '',
 	tabLibrary: {
 		name: '探索',
