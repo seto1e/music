@@ -1,7 +1,7 @@
 /*!
  * @name podcast-itunes
  * @description iTunes Podcast Plugin
- * @version v6.2.0
+ * @version v6.3.0
  * @author custom
  * @key csp_podcast
  */
@@ -25,8 +25,8 @@ const appConfig = {
   tabLibrary: {
     name: '探索',
     groups: [
-      { name: '🇭🇰 香港熱門', type: 'playlist', ui: 3, showMore: true, ext: { gid: 'hk_top' } },
-      { name: '🇬🇧 UK Top', type: 'playlist', ui: 3, showMore: true, ext: { gid: 'uk_top' } },
+      { name: '🇭🇰 香港熱門', type: 'playlist', ui: 1, showMore: true, ext: { gid: 'hk_top' } },
+      { name: '🇬🇧 UK Top', type: 'playlist', ui: 1, showMore: true, ext: { gid: 'uk_top' } },
     ]
   },
   tabMe: {
@@ -99,9 +99,7 @@ async function loadItunesTopPodcasts(rssUrl) {
     return entries.map((each) => {
       try {
         const id = each?.id?.attributes?.['im:id'] ?? ''
-        const images = each?.['im:image'] ?? []
-        // 嘗試取最高解析度圖片，Apple RSS 通常有 3 個尺寸
-        const cover = images.slice(-1)[0]?.label?.replace('170x170', '600x600') ?? ''
+        const cover = (each?.['im:image'] ?? []).slice(-1)[0]?.label ?? ''
         return {
           id,
           name: each?.['im:name']?.label ?? '',
@@ -118,10 +116,8 @@ async function getPlaylists(ext) {
   try {
     const { page, gid } = argsify(ext)
     if (page > 1) return jsonify({ list: [] })
-
     const feed = FEATURED_FEEDS.find(f => f.id === gid)
     if (!feed) return jsonify({ list: [] })
-
     const cards = await loadItunesTopPodcasts(feed.rss)
     return jsonify({ list: cards })
   } catch (e) { return jsonify({ list: [] }) }
@@ -144,7 +140,6 @@ async function getSongs(ext) {
     }
 
     if (!rssUrl) return jsonify({ list: [] })
-
     const episodes = await loadRssEpisodes(rssUrl)
     return jsonify({ list: episodes })
   } catch (e) { return jsonify({ list: [] }) }
