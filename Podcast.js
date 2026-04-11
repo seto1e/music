@@ -1,7 +1,7 @@
 /*!
  * @name podcast-itunes
- * @description iTunes + BBC Podcast Plugin
- * @version v6.1.0
+ * @description iTunes Podcast Plugin
+ * @version v6.2.0
  * @author custom
  * @key csp_podcast
  */
@@ -15,8 +15,6 @@ const ITUNES_API = 'https://itunes.apple.com'
 const FEATURED_FEEDS = [
   { id: 'hk_top', name: '🇭🇰 香港熱門', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/json' },
   { id: 'uk_top', name: '🇬🇧 UK Top', rss: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=20/json' },
-  { id: 'bbc_learning', name: '🎓 BBC 6 Min English', rss: 'https://podcasts.files.bbci.co.uk/p02pc9zn.rss', type: 'rss_direct' },
-  { id: 'bbc_global_news', name: '🌍 BBC Global News', rss: 'https://podcasts.files.bbci.co.uk/p02nq0gn.rss', type: 'rss_direct' },
 ]
 
 const appConfig = {
@@ -27,10 +25,8 @@ const appConfig = {
   tabLibrary: {
     name: '探索',
     groups: [
-      { name: '🇭🇰 香港熱門', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'hk_top' } },
-      { name: '🇬🇧 UK Top', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'uk_top' } },
-      { name: '🎓 BBC 6 Min English', type: 'song', ui: 0, showMore: false, ext: { gid: 'bbc_learning' } },
-      { name: '🌍 BBC Global News', type: 'song', ui: 0, showMore: false, ext: { gid: 'bbc_global_news' } },
+      { name: '🇭🇰 香港熱門', type: 'playlist', ui: 3, showMore: true, ext: { gid: 'hk_top' } },
+      { name: '🇬🇧 UK Top', type: 'playlist', ui: 3, showMore: true, ext: { gid: 'uk_top' } },
     ]
   },
   tabMe: {
@@ -103,10 +99,13 @@ async function loadItunesTopPodcasts(rssUrl) {
     return entries.map((each) => {
       try {
         const id = each?.id?.attributes?.['im:id'] ?? ''
+        const images = each?.['im:image'] ?? []
+        // 嘗試取最高解析度圖片，Apple RSS 通常有 3 個尺寸
+        const cover = images.slice(-1)[0]?.label?.replace('170x170', '600x600') ?? ''
         return {
           id,
           name: each?.['im:name']?.label ?? '',
-          cover: (each?.['im:image'] ?? []).slice(-1)[0]?.label ?? '',
+          cover,
           artist: { id, name: each?.['im:artist']?.label ?? '' },
           ext: { gid: 'podcast', id, type: 'podcast' }
         }
@@ -130,19 +129,8 @@ async function getPlaylists(ext) {
 
 async function getSongs(ext) {
   try {
-    const { page, id, feedUrl, gid } = argsify(ext)
-    if (page > 1) return jsonify({ list: [] })
-
-    // BBC direct RSS — 用 gid 對應 feed
-    if (gid === 'bbc_learning' || gid === 'bbc_global_news') {
-      const feed = FEATURED_FEEDS.find(f => f.id === gid)
-      if (!feed) return jsonify({ list: [] })
-      const episodes = await loadRssEpisodes(feed.rss)
-      return jsonify({ list: episodes })
-    }
-
-    // iTunes 播客 — 用 id 查 feedUrl
-    if (!id) return jsonify({ list: [] })
+    const { page, id, feedUrl } = argsify(ext)
+    if (page > 1 || !id) return jsonify({ list: [] })
 
     let rssUrl = feedUrl ?? ''
     if (!rssUrl) {
