@@ -1,7 +1,7 @@
 /*!
  * @name podcast-itunes
  * @description iTunes + BBC Podcast Plugin
- * @version v6.0.0
+ * @version v6.1.0
  * @author custom
  * @key csp_podcast
  */
@@ -29,8 +29,8 @@ const appConfig = {
     groups: [
       { name: '🇭🇰 香港熱門', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'hk_top' } },
       { name: '🇬🇧 UK Top', type: 'playlist', ui: 0, showMore: true, ext: { gid: 'uk_top' } },
-      { name: '🎓 BBC 6 Min English', type: 'playlist', ui: 0, showMore: false, ext: { gid: 'bbc_learning' } },
-      { name: '🌍 BBC Global News', type: 'playlist', ui: 0, showMore: false, ext: { gid: 'bbc_global_news' } },
+      { name: '🎓 BBC 6 Min English', type: 'song', ui: 0, showMore: false, ext: { gid: 'bbc_learning' } },
+      { name: '🌍 BBC Global News', type: 'song', ui: 0, showMore: false, ext: { gid: 'bbc_global_news' } },
     ]
   },
   tabMe: {
@@ -123,11 +123,6 @@ async function getPlaylists(ext) {
     const feed = FEATURED_FEEDS.find(f => f.id === gid)
     if (!feed) return jsonify({ list: [] })
 
-    if (feed.type === 'rss_direct') {
-      const episodes = await loadRssEpisodes(feed.rss)
-      return jsonify({ list: episodes })
-    }
-
     const cards = await loadItunesTopPodcasts(feed.rss)
     return jsonify({ list: cards })
   } catch (e) { return jsonify({ list: [] }) }
@@ -135,8 +130,19 @@ async function getPlaylists(ext) {
 
 async function getSongs(ext) {
   try {
-    const { page, id, feedUrl } = argsify(ext)
-    if (page > 1 || !id) return jsonify({ list: [] })
+    const { page, id, feedUrl, gid } = argsify(ext)
+    if (page > 1) return jsonify({ list: [] })
+
+    // BBC direct RSS — 用 gid 對應 feed
+    if (gid === 'bbc_learning' || gid === 'bbc_global_news') {
+      const feed = FEATURED_FEEDS.find(f => f.id === gid)
+      if (!feed) return jsonify({ list: [] })
+      const episodes = await loadRssEpisodes(feed.rss)
+      return jsonify({ list: episodes })
+    }
+
+    // iTunes 播客 — 用 id 查 feedUrl
+    if (!id) return jsonify({ list: [] })
 
     let rssUrl = feedUrl ?? ''
     if (!rssUrl) {
