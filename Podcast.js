@@ -1,7 +1,7 @@
 /*!
  * @name podcast-itunes
  * @description iTunes Podcast Plugin
- * @version v6.3.0
+ * @version v6.4.0
  * @author custom
  * @key csp_podcast
  */
@@ -13,8 +13,31 @@ const headers = { 'User-Agent': UA }
 const ITUNES_API = 'https://itunes.apple.com'
 
 const FEATURED_FEEDS = [
+  // 地區熱門
   { id: 'hk_top', name: '🇭🇰 香港熱門', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/json' },
+  { id: 'tw_top', name: '🇹🇼 台灣熱門', rss: 'https://itunes.apple.com/tw/rss/toppodcasts/limit=20/json' },
   { id: 'uk_top', name: '🇬🇧 UK Top', rss: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=20/json' },
+  { id: 'us_top', name: '🇺🇸 美國熱門', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/json' },
+  // 香港分類
+  { id: 'hk_news', name: '📰 香港 新聞時事', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/genre=1489/json' },
+  { id: 'hk_edu', name: '📚 香港 教育', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/genre=1304/json' },
+  { id: 'hk_biz', name: '💼 香港 商業財經', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/genre=1321/json' },
+  { id: 'hk_health', name: '🏃 香港 健康', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/genre=1512/json' },
+  { id: 'hk_arts', name: '🎭 香港 藝術', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/genre=1301/json' },
+  { id: 'hk_science', name: '🔬 香港 科學', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/genre=1533/json' },
+  { id: 'hk_comedy', name: '😂 香港 喜劇', rss: 'https://itunes.apple.com/hk/rss/toppodcasts/limit=20/genre=1303/json' },
+  // 英國分類
+  { id: 'uk_news', name: '📰 UK 新聞時事', rss: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=20/genre=1489/json' },
+  { id: 'uk_biz', name: '💼 UK 商業財經', rss: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=20/genre=1321/json' },
+  { id: 'uk_science', name: '🔬 UK 科學', rss: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=20/genre=1533/json' },
+  { id: 'uk_arts', name: '🎭 UK 藝術', rss: 'https://itunes.apple.com/gb/rss/toppodcasts/limit=20/genre=1301/json' },
+  // 美國分類
+  { id: 'us_news', name: '📰 美國 新聞時事', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1489/json' },
+  { id: 'us_tech', name: '💻 美國 科技', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1318/json' },
+  { id: 'us_crime', name: '🔍 美國 True Crime', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1488/json' },
+  { id: 'us_comedy', name: '😂 美國 Comedy', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1303/json' },
+  { id: 'us_sports', name: '🏈 美國 體育', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1545/json' },
+  { id: 'us_society', name: '🎙️ 美國 Society & Culture', rss: 'https://itunes.apple.com/us/rss/toppodcasts/limit=20/genre=1324/json' },
 ]
 
 const appConfig = {
@@ -25,8 +48,31 @@ const appConfig = {
   tabLibrary: {
     name: '探索',
     groups: [
+      // 地區熱門
       { name: '🇭🇰 香港熱門', type: 'playlist', ui: 1, showMore: true, ext: { gid: 'hk_top' } },
+      { name: '🇹🇼 台灣熱門', type: 'playlist', ui: 1, showMore: true, ext: { gid: 'tw_top' } },
       { name: '🇬🇧 UK Top', type: 'playlist', ui: 1, showMore: true, ext: { gid: 'uk_top' } },
+      { name: '🇺🇸 美國熱門', type: 'playlist', ui: 1, showMore: true, ext: { gid: 'us_top' } },
+      // 香港分類
+      { name: '📰 香港 新聞時事', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_news' } },
+      { name: '📚 香港 教育', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_edu' } },
+      { name: '💼 香港 商業財經', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_biz' } },
+      { name: '🏃 香港 健康', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_health' } },
+      { name: '🎭 香港 藝術', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_arts' } },
+      { name: '🔬 香港 科學', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_science' } },
+      { name: '😂 香港 喜劇', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'hk_comedy' } },
+      // 英國分類
+      { name: '📰 UK 新聞時事', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'uk_news' } },
+      { name: '💼 UK 商業財經', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'uk_biz' } },
+      { name: '🔬 UK 科學', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'uk_science' } },
+      { name: '🎭 UK 藝術', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'uk_arts' } },
+      // 美國分類
+      { name: '📰 美國 新聞時事', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'us_news' } },
+      { name: '💻 美國 科技', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'us_tech' } },
+      { name: '🔍 美國 True Crime', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'us_crime' } },
+      { name: '😂 美國 Comedy', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'us_comedy' } },
+      { name: '🏈 美國 體育', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'us_sports' } },
+      { name: '🎙️ 美國 Society & Culture', type: 'playlist', ui: 1, showMore: false, ext: { gid: 'us_society' } },
     ]
   },
   tabMe: {
