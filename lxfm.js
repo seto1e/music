@@ -1,7 +1,7 @@
 /*!
  * @name lxfm
  * @description 
- * @version v1.0.0
+ * @version v2.0.0
  * @author kobe
  * @key csp_lxfm
  */
@@ -794,19 +794,28 @@ async function getSongInfo(ext) {
     return jsonify({ urls: [] })
   }
 
-  const result = await $lx.request('musicUrl', {
-    type: '320k',
-    musicInfo: {
-      songmid: `${songmid}`,
-      name: songName ?? '',
-      singer: singer ?? '',
-    },
-  }, {
-    source: `${source}`,
-  })
-  const soundurl = typeof result === 'string'
-    ? result
-    : result?.url ?? result?.data?.url ?? result?.urls?.[0]
+  // 將 lxfm 嘅 source 代號 map 到 gdstudio 嘅源名稱
+  const sourceMap = {
+    'tx': 'tencent',
+    'wy': 'netease',
+    'kw': 'kuwo',
+  }
 
-  return jsonify({ urls: soundurl ? [soundurl] : [] })
+  const gdSource = sourceMap[source]
+  if (!gdSource) {
+    return jsonify({ urls: [] })
+  }
+
+  try {
+    const { data } = await $fetch.get(
+      `https://music-api.gdstudio.xyz/api.php?types=url&source=${gdSource}&id=${encodeURIComponent(songmid)}&br=320`,
+      { headers }
+    )
+    const info = argsify(data)
+    const soundurl = info?.url ?? null
+
+    return jsonify({ urls: soundurl ? [soundurl] : [] })
+  } catch (e) {
+    return jsonify({ urls: [] })
+  }
 }
